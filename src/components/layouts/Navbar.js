@@ -17,10 +17,6 @@ const styles = {
   grow: {
     flexGrow: 1
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
   navBackColor: {
     backgroundColor: "#2196f3"
   }
@@ -54,12 +50,9 @@ class Navbar extends React.Component {
         <AppBar position="static" className={classes.navBackColor}>
           <Grid
             container
-            spacing={24}
-            direction="row"
             justify="center"
-            alignItems="center"
           >
-            <Grid item xs={6}>
+            <Grid item md={6} xs={12}>
               <Toolbar>
                 <Typography
                   variant="h6"
