@@ -4,11 +4,9 @@ import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
+
+import AuthenticatedNav from "./AuthenticatedNav";
 
 const styles = {
   root: {
@@ -23,14 +21,20 @@ const styles = {
 };
 
 class Navbar extends React.Component {
-  state = {
-    auth: true,
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
 
-  handleChange = event => {
-    this.setState({ auth: event.target.checked });
-  };
+    this.state = {
+      auth: true,
+      anchorEl: null
+    };
+
+    this.handleMenu = this.handleMenu.bind(this);
+  }
+
+  //   handleChange = event => {
+  //     this.setState({ auth: event.target.checked });
+  //   };
 
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -48,10 +52,7 @@ class Navbar extends React.Component {
     return (
       <div className={classes.root}>
         <AppBar position="static" className={classes.navBackColor}>
-          <Grid
-            container
-            justify="center"
-          >
+          <Grid container justify="center">
             <Grid item md={6} xs={12}>
               <Toolbar>
                 <Typography
@@ -62,33 +63,12 @@ class Navbar extends React.Component {
                   Silkroad
                 </Typography>
                 {auth && (
-                  <div>
-                    <IconButton
-                      aria-owns={open ? "menu-appbar" : undefined}
-                      aria-haspopup="true"
-                      onClick={this.handleMenu}
-                      color="inherit"
-                    >
-                      <AccountCircle />
-                    </IconButton>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right"
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right"
-                      }}
-                      open={open}
-                      onClose={this.handleClose}
-                    >
-                      <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                      <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                    </Menu>
-                  </div>
+                  <AuthenticatedNav
+                    open={open}
+                    handleMenu={this.handleMenu}
+                    handleClose={this.handleClose}
+                    anchorEl={anchorEl}
+                  />
                 )}
               </Toolbar>
             </Grid>

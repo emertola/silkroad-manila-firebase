@@ -6,18 +6,26 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Face from "@material-ui/icons/Face";
+import PhoneIphone from "@material-ui/icons/PhoneIphone";
+import Assignment from "@material-ui/icons/Assignment";
 import Toolbar from "@material-ui/core/Toolbar";
+import Divider from "@material-ui/core/Divider";
+import Fab from "@material-ui/core/Fab";
+import Grid from "@material-ui/core/Grid";
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1
   },
+  tool: {
+    padding: 0,
+    marginBottom: 40
+  },
   card: {
-    minWidth: 100,
-    marginTop: 20
+    minWidth: 100
   },
   typo: { marginLeft: "10px", flexGrow: 6, float: "left" },
-  sub: {fontSize: "14px"},
+  sub: { fontSize: "12px" },
   bullet: {
     display: "inline-block",
     margin: "0 2px",
@@ -30,11 +38,31 @@ const styles = {
     marginBottom: 12
   },
   icon: {
-    fontSize: "90px",
     color: "#616161",
     float: "left"
+  },
+  iconProfile: {
+    fontSize: 80
+  },
+  details: {
+    minHeight: 30
+  },
+  fab: {
+    marginTop: 20,
+    width: "100%"
+  },
+  ptoTitle: {
+    fontSize: 14,
+    color: "hsl(214, 7%, 47%)"
+  },
+  ptoValue: {
+    fontSize: 20,
+    fontWeight: 500
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
   }
-};
+});
 
 const Profile = props => {
   const { classes } = props;
@@ -42,15 +70,44 @@ const Profile = props => {
     <div>
       <Card className={classes.card}>
         <CardContent>
-          <Toolbar>
-            <Face className={classes.icon} />
-            <Typography variant="h5" className={classes.typo}>
+          <Toolbar className={classes.tool}>
+            <Face className={classes.iconProfile} />
+            <Typography variant="headline" className={classes.typo}>
               Erwin Mertola
-              <div className={classes.sub}><em>emertola@dummy.com</em></div>
+              <div className={classes.sub}>emertola@dummy.com</div>
             </Typography>
           </Toolbar>
+          <Toolbar className={classes.details}>
+            <Typography variant="body2">
+              <Assignment className={classes.icon} /> QA Specialist
+            </Typography>
+          </Toolbar>
+          <Toolbar className={classes.details}>
+            <Typography variant="body2">
+              <PhoneIphone className={classes.icon} /> + 63 977 819 3682
+            </Typography>
+          </Toolbar>
+          <Fab variant="extended" className={classes.fab}>
+            Make a Request
+          </Fab>
         </CardContent>
-        <CardActions>Action</CardActions>
+        <Divider variant="middle" />
+        <CardActions>
+          <Grid container spacing={24} justify="center">
+            <Grid item md={4}>
+              <Typography className={classes.ptoTitle}>Vacation</Typography>
+              <Typography className={classes.ptoValue}>20</Typography>
+            </Grid>
+            <Grid item md={4}>
+              <Typography className={classes.ptoTitle}>Sick</Typography>
+              <Typography className={classes.ptoValue}>12</Typography>
+            </Grid>
+            <Grid item md={4}>
+              <Typography className={classes.ptoTitle}>Convertibles</Typography>
+              <Typography className={classes.ptoValue}>10</Typography>
+            </Grid>
+          </Grid>
+        </CardActions>
       </Card>
     </div>
   );
