@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom'
+import * as ROUTES from '../../routes'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
@@ -46,7 +48,7 @@ const styles = theme => ({
   },
 });
 
-function SignIn(props) {
+const SignIn = props => {
   const { classes } = props;
 
   return (
@@ -75,6 +77,7 @@ function SignIn(props) {
           </Button>
         </form>
       </Paper>
+      <Typography variant="caption">Not registered yet? <Link to={ROUTES.SIGN_UP}>Sign up here!</Link></Typography>
     </main>
   );
 }
