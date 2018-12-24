@@ -27,12 +27,12 @@ class Navbar extends React.Component {
     super(props);
 
     this.state = {
-      auth: false,
       anchorEl: null
     };
 
     this.handleMenu = this.handleMenu.bind(this);
   }
+
 
   //   handleChange = event => {
   //     this.setState({ auth: event.target.checked });
@@ -47,8 +47,9 @@ class Navbar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
+    console.log(this.props)
+    const { classes, authUser } = this.props;
+    const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
@@ -64,7 +65,7 @@ class Navbar extends React.Component {
                 >
                   Silkroad
                 </Typography>
-                {auth ? (
+                {authUser ? (
                   <AuthenticatedNav
                     open={open}
                     handleMenu={this.handleMenu}
@@ -72,7 +73,9 @@ class Navbar extends React.Component {
                     anchorEl={anchorEl}
                   />
                 ) : (
-                  <Button component={Link} to="/login" color="inherit">Sign in</Button>
+                  <Button component={Link} to="/login" color="inherit">
+                    Sign in
+                  </Button>
                 )}
               </Toolbar>
             </Grid>
