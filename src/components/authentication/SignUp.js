@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { withFirebase } from "../firebase";
+import * as ROUTES from "../../routes";
+import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
 
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
@@ -88,12 +91,14 @@ class SignUpFormBase extends Component {
     const { email, password } = this.state;
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => this.setState({ ...INITIAL_STATE }))
+      .then(authUser => {
+        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.HOME);
+      })
       .catch(error => this.setState({ error }));
   };
 
   render() {
-    console.log(this.props);
     const { classes } = this.props;
     const { email, password, passwordConf, error } = this.state;
     const isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
@@ -110,10 +115,12 @@ class SignUpFormBase extends Component {
     return (
       <main className={classes.main}>
         <CssBaseline />
+
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          {error && <Typography color="error">{error.message}</Typography>}
           <form className={classes.form} onSubmit={this.onSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
@@ -153,7 +160,6 @@ class SignUpFormBase extends Component {
             >
               Sign up
             </Button>
-            {error && <p>{error.message}</p>}
           </form>
         </Paper>
       </main>
@@ -165,7 +171,9 @@ SignUpFormBase.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-const SignUpForm = withFirebase(withStyles(styles)(SignUpFormBase))
+SignUpFormBase = withStyles(styles)(SignUpFormBase)
+
+const SignUpForm = compose(withRouter, withFirebase)(SignUpFormBase);
 
 export default SignUp;
 
