@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { AuthUserContext } from "../session";
 
 import AuthenticatedNav from "./AuthenticatedNav";
 
@@ -33,7 +34,6 @@ class Navbar extends React.Component {
     this.handleMenu = this.handleMenu.bind(this);
   }
 
-
   //   handleChange = event => {
   //     this.setState({ auth: event.target.checked });
   //   };
@@ -47,8 +47,7 @@ class Navbar extends React.Component {
   };
 
   render() {
-    console.log(this.props)
-    const { classes, authUser } = this.props;
+    const { classes } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -65,18 +64,22 @@ class Navbar extends React.Component {
                 >
                   Silkroad
                 </Typography>
-                {authUser ? (
-                  <AuthenticatedNav
-                    open={open}
-                    handleMenu={this.handleMenu}
-                    handleClose={this.handleClose}
-                    anchorEl={anchorEl}
-                  />
-                ) : (
-                  <Button component={Link} to="/login" color="inherit">
-                    Sign in
-                  </Button>
-                )}
+                <AuthUserContext.Consumer>
+                  {authUser =>
+                    authUser ? (
+                      <AuthenticatedNav
+                        open={open}
+                        handleMenu={this.handleMenu}
+                        handleClose={this.handleClose}
+                        anchorEl={anchorEl}
+                      />
+                    ) : (
+                      <Button component={Link} to="/login" color="inherit">
+                        Sign in
+                      </Button>
+                    )
+                  }
+                </AuthUserContext.Consumer>
               </Toolbar>
             </Grid>
           </Grid>

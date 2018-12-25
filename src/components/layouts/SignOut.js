@@ -4,7 +4,7 @@ import {withFirebase} from '../firebase'
 
 const SignOut = ({firebase}) => {
     return (
-        <MenuItem onClick={firebase.doSignOut}>Sign out</MenuItem>
+        <MenuItem onClick={ firebase.doSignOut }>Sign out</MenuItem>
     )
 }
 
