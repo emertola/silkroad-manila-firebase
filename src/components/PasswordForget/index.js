@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { withFirebase } from "../firebase";
-import * as ROUTES from "../../routes";
-import { withRouter } from "react-router-dom";
-import { compose } from "recompose";
-
 import PropTypes from "prop-types";
+import { compose } from "recompose";
+import { withRouter } from "react-router-dom";
+import * as ROUTES from "../../routes";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
@@ -13,14 +12,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-
-const SignUp = props => {
-  return (
-    <div>
-      <SignUpForm />
-    </div>
-  );
-};
 
 const styles = theme => ({
   main: {
@@ -62,14 +53,12 @@ const styles = theme => ({
 
 const INITIAL_STATE = {
   email: "",
-  password: "",
-  passwordConf: "",
   error: null
 };
 
-class SignUpFormBase extends Component {
-  constructor(props) {
-    super(props);
+class PasswordForgetFormBase extends Component {
+  constructor() {
+    super();
 
     this.state = {
       ...INITIAL_STATE
@@ -88,10 +77,10 @@ class SignUpFormBase extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { email } = this.state;
     this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => {
+      .doPasswordReset(email)
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.PROFILE);
       })
@@ -100,25 +89,20 @@ class SignUpFormBase extends Component {
 
   render() {
     const { classes } = this.props;
-    const { email, password, passwordConf, error } = this.state;
+    const { email, error } = this.state;
     const isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
       email
     );
 
     // if invalid, disable the submit button
-    const isInvalid =
-      password === "" ||
-      passwordConf === "" ||
-      password !== passwordConf ||
-      !isEmailValid;
+    const isInvalid = !isEmailValid;
 
     return (
       <main className={classes.main}>
         <CssBaseline />
-
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h5">
-            Sign up
+            Forgot Password?
           </Typography>
           {error && <Typography color="error">{error.message}</Typography>}
           <form className={classes.form} onSubmit={this.onSubmit}>
@@ -129,26 +113,7 @@ class SignUpFormBase extends Component {
                 name="email"
                 onChange={this.onInputChange}
                 value={email}
-              />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="password"
-                type="password"
-                id="password"
-                onChange={this.onInputChange}
-                value={password}
-              />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="passwordConf">Confirm Password</InputLabel>
-              <Input
-                name="passwordConf"
-                type="password"
-                id="passwordConf"
-                onChange={this.onInputChange}
-                value={passwordConf}
+                autoFocus
               />
             </FormControl>
             <Button
@@ -158,7 +123,7 @@ class SignUpFormBase extends Component {
               className={classes.submit}
               disabled={isInvalid}
             >
-              Sign up
+              Reset My Password
             </Button>
           </form>
         </Paper>
@@ -167,17 +132,25 @@ class SignUpFormBase extends Component {
   }
 }
 
-SignUpFormBase.propTypes = {
+PasswordForgetFormBase.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-SignUpFormBase = withStyles(styles)(SignUpFormBase);
+const PasswordForget = props => {
+  return (
+    <div>
+      <PasswordForgetForm />
+    </div>
+  );
+};
 
-const SignUpForm = compose(
+PasswordForgetFormBase = withStyles(styles)(PasswordForgetFormBase);
+
+const PasswordForgetForm = compose(
   withRouter,
   withFirebase
-)(SignUpFormBase);
+)(PasswordForgetFormBase);
 
-export default SignUp;
+export default PasswordForget;
 
-export { SignUpForm };
+export { PasswordForgetForm };

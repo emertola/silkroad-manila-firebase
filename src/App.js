@@ -7,7 +7,7 @@ import Navbar from "./components/layouts/Navbar";
 import Dashboard from "./components/dashboard/Dashboard";
 import SignIn from "./components/authentication/SignIn";
 import SignUp from "./components/authentication/SignUp";
-import TestFB from "./components/TestFB";
+import PasswordForget from "./components/PasswordForget";
 
 const App = () => {
   return (
@@ -15,10 +15,10 @@ const App = () => {
       <div>
         <Navbar />
         <Switch>
-          <Route path="/test" component={TestFB} />
           <Route path={ROUTES.PROFILE} component={Dashboard} />
           <Route path={ROUTES.SIGN_IN} component={SignIn} />
           <Route path={ROUTES.SIGN_UP} component={SignUp} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
         </Switch>
       </div>
     </BrowserRouter>

@@ -1,13 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import * as ROUTES from '../../routes'
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
-import SignOut from './SignOut'
+import SignOut from "./SignOut";
 
 const AuthenticatedNav = props => {
-    const {open, handleClose, handleMenu, anchorEl} = props;
+  const { open, handleClose, handleMenu, anchorEl } = props;
 
   return (
     <div>
@@ -33,7 +35,9 @@ const AuthenticatedNav = props => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Acount</MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to={ROUTES.PROFILE}>
+          Acount
+        </MenuItem>
         <SignOut />
       </Menu>
     </div>

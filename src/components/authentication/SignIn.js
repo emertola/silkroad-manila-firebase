@@ -138,8 +138,11 @@ class SignInFormBase extends Component {
             </Button>
           </form>
         </Paper>
-        <Typography variant="caption">
+        <Typography variant="body1">
           Not registered yet? <Link to={ROUTES.SIGN_UP}>Sign up here!</Link>
+        </Typography>
+        <Typography variant="body1">
+          <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
         </Typography>
       </main>
     );
