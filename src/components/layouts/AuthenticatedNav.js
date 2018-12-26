@@ -36,7 +36,7 @@ const AuthenticatedNav = props => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose} component={Link} to={ROUTES.PROFILE}>
-          Acount
+          Account
         </MenuItem>
         <SignOut />
       </Menu>
