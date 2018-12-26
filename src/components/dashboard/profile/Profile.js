@@ -74,7 +74,7 @@ const Profile = props => {
             <Face className={classes.iconProfile} />
             <Typography variant="headline" className={classes.typo}>
               Erwin Mertola
-              <div className={classes.sub}>emertola@dummy.com</div>
+              <div className={classes.sub}>{props.userEmail}</div>
             </Typography>
           </Toolbar>
           <Toolbar className={classes.details}>

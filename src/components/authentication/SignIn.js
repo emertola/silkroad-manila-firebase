@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withFirebase } from "../firebase";
+import { withAuthentication, AuthUserContext } from "../session";
 import PropTypes from "prop-types";
 import { compose } from "recompose";
 import { Link, withRouter } from "react-router-dom";
@@ -154,14 +155,14 @@ SignInFormBase.propTypes = {
 };
 
 const SignIn = props => {
+  console.log(props)
   return (
-    <div>
       <SignInForm />
-    </div>
-  );
+  )
 };
 
 SignInFormBase = withStyles(styles)(SignInFormBase);
+
 
 const SignInForm = compose(
   withRouter,
