@@ -64,6 +64,8 @@ const INITIAL_STATE = {
   email: "",
   password: "",
   passwordConf: "",
+  firstName: "",
+  lastName: "",
   error: null
 };
 
@@ -88,9 +90,17 @@ class SignUpFormBase extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const {firstName, lastName, email, password } = this.state;
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+        // Create a user in your Firebase Realtime Database
+        return this.props.firebase.user(authUser.user.uid).set({
+          firstName,
+          lastName,
+          email
+        });
+      })
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.PROFILE);
@@ -100,7 +110,7 @@ class SignUpFormBase extends Component {
 
   render() {
     const { classes } = this.props;
-    const { email, password, passwordConf, error } = this.state;
+    const { firstName, lastName, email, password, passwordConf, error } = this.state;
     const isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
       email
     );
@@ -122,6 +132,24 @@ class SignUpFormBase extends Component {
           </Typography>
           {error && <Typography color="error">{error.message}</Typography>}
           <form className={classes.form} onSubmit={this.onSubmit}>
+          <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="firstName">First Name</InputLabel>
+              <Input
+                id="firstName"
+                name="firstName"
+                onChange={this.onInputChange}
+                value={firstName}
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="firstName">Last Name</InputLabel>
+              <Input
+                id="lastName"
+                name="lastName"
+                onChange={this.onInputChange}
+                value={lastName}
+              />
+            </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
               <Input
