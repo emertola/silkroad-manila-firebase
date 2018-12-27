@@ -5,6 +5,7 @@ import { compose } from "recompose";
 import { withFirebase } from "../firebase";
 import AuthUserContext from "../session/context";
 
+
 const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
     componentDidMount() {

@@ -5,6 +5,7 @@ import { withAuthentication } from "./components/session";
 
 import Navbar from "./components/layouts/Navbar";
 import Dashboard from "./components/dashboard/Dashboard";
+import Admin from './components/Admin'
 import SignIn from "./components/authentication/SignIn";
 import SignUp from "./components/authentication/SignUp";
 import PasswordForget from "./components/PasswordForget";
@@ -17,6 +18,7 @@ const App = () => {
         <Navbar />
         <Switch>
           <Route path={ROUTES.PROFILE} component={Dashboard} />
+          <Route path={ROUTES.ADMIN} component={Admin} />
           <Route path={ROUTES.SIGN_IN} component={SignIn} />
           <Route path={ROUTES.SIGN_UP} component={SignUp} />
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
