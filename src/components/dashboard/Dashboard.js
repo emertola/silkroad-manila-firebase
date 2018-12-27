@@ -35,7 +35,7 @@ class Dashboard extends Component {
   }
 }
 
-const condition = authUser => authUser;
+const condition = authUser => !!authUser;
 
 Dashboard = withStyles(styles)(Dashboard);
 
