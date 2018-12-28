@@ -3,6 +3,7 @@ import { withFirebase } from "../firebase";
 import * as ROUTES from "../../routes";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
+import * as ROLES from '../../roles'
 
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
@@ -12,6 +13,7 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import Checkbox from "@material-ui/core/Checkbox";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const SignUp = props => {
@@ -66,6 +68,7 @@ const INITIAL_STATE = {
   passwordConf: "",
   firstName: "",
   lastName: "",
+  isAdmin: false,
   error: null
 };
 
@@ -79,6 +82,7 @@ class SignUpFormBase extends Component {
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onCheck = this.onCheck.bind(this);
   }
 
   onInputChange = e => {
@@ -88,9 +92,22 @@ class SignUpFormBase extends Component {
     });
   };
 
+  onCheck = e => {
+    const { name } = e.target;
+    this.setState({
+      [name]: e.target.checked
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
-    const {firstName, lastName, email, password } = this.state;
+    const { firstName, lastName, email, password, isAdmin } = this.state;
+    const roles = []
+
+    if(isAdmin) {
+      roles.push(ROLES.ADMIN)
+    }
+
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
@@ -98,7 +115,8 @@ class SignUpFormBase extends Component {
         return this.props.firebase.user(authUser.user.uid).set({
           firstName,
           lastName,
-          email
+          email,
+          roles
         });
       })
       .then(authUser => {
@@ -110,7 +128,15 @@ class SignUpFormBase extends Component {
 
   render() {
     const { classes } = this.props;
-    const { firstName, lastName, email, password, passwordConf, error } = this.state;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConf,
+      isAdmin,
+      error
+    } = this.state;
     const isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
       email
     );
@@ -132,7 +158,7 @@ class SignUpFormBase extends Component {
           </Typography>
           {error && <Typography color="error">{error.message}</Typography>}
           <form className={classes.form} onSubmit={this.onSubmit}>
-          <FormControl margin="normal" required fullWidth>
+            <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="firstName">First Name</InputLabel>
               <Input
                 id="firstName"
@@ -179,6 +205,12 @@ class SignUpFormBase extends Component {
                 value={passwordConf}
               />
             </FormControl>
+            <Checkbox
+              color="default"
+              checked={isAdmin}
+              onChange={this.onCheck}
+              name="isAdmin"
+            />
             <Button
               type="submit"
               fullWidth
