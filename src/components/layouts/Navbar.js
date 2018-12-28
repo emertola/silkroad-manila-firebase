@@ -28,28 +28,26 @@ class Navbar extends React.Component {
     super(props);
 
     this.state = {
-      anchorEl: null
+      anchorEl: null,
+      open: false
     };
 
     this.handleMenu = this.handleMenu.bind(this);
   }
 
-  //   handleChange = event => {
-  //     this.setState({ auth: event.target.checked });
-  //   };
 
   handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget, open: true });
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null, open: false });
   };
 
   render() {
     const { classes } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { anchorEl, open } = this.state;
+    // const open = Boolean(anchorEl)
 
     return (
       <div className={classes.root}>
