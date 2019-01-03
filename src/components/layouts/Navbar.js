@@ -28,16 +28,14 @@ class Navbar extends React.Component {
     super(props);
 
     this.state = {
-      anchorEl: null,
-      open: false
+      anchorEl: null
     };
 
     this.handleMenu = this.handleMenu.bind(this);
   }
 
-
   handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget, open: true });
+    this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = () => {
@@ -46,8 +44,8 @@ class Navbar extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { anchorEl, open } = this.state;
-    // const open = Boolean(anchorEl)
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
     return (
       <div className={classes.root}>

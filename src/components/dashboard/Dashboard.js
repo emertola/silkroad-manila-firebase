@@ -22,7 +22,7 @@ class Dashboard extends Component {
           <div className={classes.root}>
             <Grid container spacing={24} justify="center">
               <Grid item md={3} xs={12}>
-                <Profile userEmail={authUser.email} />
+                <Profile user={authUser} />
               </Grid>
               <Grid item md={3} xs={12}>
                 <RequestLog />

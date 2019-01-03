@@ -37,25 +37,38 @@ class Firebase {
   onAuthUserListener = (next, fallback) =>
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
-        this.user(authUser.uid)
-          .once("value")
-          .then(snapshot => {
-            const dbUser = snapshot.val();
+        this.user(authUser.uid).on("value", snap => {
+          const dbUser = snap.val();
+          if (!dbUser.roles) {
+            dbUser.roles = [];
+          }
 
-            // default empty roles
-            if (!dbUser.roles) {
-              dbUser.roles = [];
-            }
+          authUser = {
+            uid: authUser.uid,
+            email: authUser.email,
+            ...dbUser
+          };
+          next(authUser);
+        });
+        // this.user(authUser.uid)
+        //   .once("value")
+        //   .then(snapshot => {
+        //     const dbUser = snapshot.val();
 
-            // merge auth and db user
-            authUser = {
-              uid: authUser.uid,
-              email: authUser.email,
-              ...dbUser
-            };
+        //     // default empty roles
+        //     if (!dbUser.roles) {
+        //       dbUser.roles = [];
+        //     }
 
-            next(authUser);
-          });
+        //     // merge auth and db user
+        //     authUser = {
+        //       uid: authUser.uid,
+        //       email: authUser.email,
+        //       ...dbUser
+        //     };
+
+        //     next(authUser);
+        //   });
       } else {
         fallback();
       }
@@ -66,6 +79,10 @@ class Firebase {
   user = uid => this.db.ref(`users/${uid}`);
 
   users = () => this.db.ref("users");
+
+  // Requests API
+
+  request = uid => this.db.ref(`requests/${uid}`);
 }
 
 export default Firebase;

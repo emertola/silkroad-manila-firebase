@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { withFirebase } from "../../firebase";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,6 +13,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Divider from "@material-ui/core/Divider";
 import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
+import SendRequest from "../requests/SendRequest";
 
 const styles = theme => ({
   root: {
@@ -47,9 +49,25 @@ const styles = theme => ({
   details: {
     minHeight: 30
   },
+  // fab: {
+  //   marginTop: 20,
+  //   width: "100%",
+  //   backgroundColor: "#26A69A",
+  //   color: "#fff",
+  //   "&:hover": {
+  //     backgroundColor: "#009688"
+  //   }
+  // },
   fab: {
     marginTop: 20,
-    width: "100%"
+    width: "100%",
+    backgroundColor: "transparent",
+    border: "1px solid #26A69A",
+    boxShadow: "none",
+    color: "#26A69A",
+    "&:hover": {
+      backgroundColor: "#E0F2F1"
+    }
   },
   ptoTitle: {
     fontSize: 14,
@@ -64,57 +82,105 @@ const styles = theme => ({
   }
 });
 
-const Profile = props => {
-  const { classes } = props;
-  return (
-    <div>
-      <Card className={classes.card}>
-        <CardContent>
-          <Toolbar className={classes.tool}>
-            <Face className={classes.iconProfile} />
-            <Typography variant="headline" className={classes.typo}>
-              Erwin Mertola
-              <div className={classes.sub}>{props.userEmail}</div>
-            </Typography>
-          </Toolbar>
-          <Toolbar className={classes.details}>
-            <Typography variant="body2">
-              <Assignment className={classes.icon} /> QA Specialist
-            </Typography>
-          </Toolbar>
-          <Toolbar className={classes.details}>
-            <Typography variant="body2">
-              <PhoneIphone className={classes.icon} /> + 63 977 819 3682
-            </Typography>
-          </Toolbar>
-          <Fab variant="extended" className={classes.fab}>
-            Make a Request
-          </Fab>
-        </CardContent>
-        <Divider variant="middle" />
-        <CardActions>
-          <Grid container spacing={24} justify="center">
-            <Grid item md={4}>
-              <Typography className={classes.ptoTitle}>Vacation</Typography>
-              <Typography className={classes.ptoValue}>20</Typography>
+class Profile extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      open: false
+    };
+  }
+
+  handleOpen = () => {
+    this.setState({
+      open: true
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      open: false
+    });
+  };
+
+  render() {
+    const { classes, user, firebase } = this.props;
+    const { vacation, sick } = user.credits;
+    const { open } = this.state;
+    const greaterThanFive = num => (num >= 5 ? 5 : num);
+    const getConvertibles = greaterThanFive(vacation) + greaterThanFive(sick);
+
+    return (
+      <div>
+        <Card className={classes.card}>
+          <CardContent>
+            <Toolbar className={classes.tool}>
+              <Face className={classes.iconProfile} />
+              <Typography variant="headline" className={classes.typo}>
+                {user.firstName} {user.lastName}
+                <div className={classes.sub}>{user.email}</div>
+              </Typography>
+            </Toolbar>
+            <Toolbar className={classes.details}>
+              <Typography variant="body2">
+                <Assignment className={classes.icon} /> {user.position}
+              </Typography>
+            </Toolbar>
+            <Toolbar className={classes.details}>
+              <Typography variant="body2">
+                <PhoneIphone className={classes.icon} /> {user.mobile}
+              </Typography>
+            </Toolbar>
+            <Fab
+              size="small"
+              variant="extended"
+              className={classes.fab}
+              onClick={this.handleOpen}
+            >
+              Make a Request
+            </Fab>
+          </CardContent>
+          <Divider variant="middle" />
+          <CardActions>
+            <Grid container spacing={24} justify="center">
+              <Grid item md={4}>
+                <Typography className={classes.ptoTitle}>Vacation</Typography>
+                <Typography className={classes.ptoValue}>
+                  {user.credits.vacation}
+                </Typography>
+              </Grid>
+              <Grid item md={4}>
+                <Typography className={classes.ptoTitle}>Sick</Typography>
+                <Typography className={classes.ptoValue}>
+                  {user.credits.sick}
+                </Typography>
+              </Grid>
+              <Grid item md={4}>
+                <Typography className={classes.ptoTitle}>
+                  Convertibles
+                </Typography>
+                <Typography className={classes.ptoValue}>
+                  {getConvertibles}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item md={4}>
-              <Typography className={classes.ptoTitle}>Sick</Typography>
-              <Typography className={classes.ptoValue}>12</Typography>
-            </Grid>
-            <Grid item md={4}>
-              <Typography className={classes.ptoTitle}>Convertibles</Typography>
-              <Typography className={classes.ptoValue}>10</Typography>
-            </Grid>
-          </Grid>
-        </CardActions>
-      </Card>
-    </div>
-  );
-};
+          </CardActions>
+        </Card>
+
+        <SendRequest
+          open={open}
+          handleClose={this.handleClose}
+          handleOpen={this.handleOpen}
+          user={user}
+          firebase={firebase}
+        />
+      </div>
+    );
+  }
+}
 
 Profile.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Profile);
+export default withFirebase(withStyles(styles)(Profile));

@@ -3,7 +3,7 @@ import { withFirebase } from "../firebase";
 import * as ROUTES from "../../routes";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
-import * as ROLES from '../../roles'
+import * as ROLES from "../../roles";
 
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
@@ -13,7 +13,6 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Checkbox from "@material-ui/core/Checkbox";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const SignUp = props => {
@@ -68,7 +67,14 @@ const INITIAL_STATE = {
   passwordConf: "",
   firstName: "",
   lastName: "",
+  mobile: "",
+  position: "",
   isAdmin: false,
+  credits: {
+    vacation: 0,
+    sick: 0
+  },
+  requests: [],
   error: null
 };
 
@@ -82,7 +88,6 @@ class SignUpFormBase extends Component {
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onCheck = this.onCheck.bind(this);
   }
 
   onInputChange = e => {
@@ -92,20 +97,23 @@ class SignUpFormBase extends Component {
     });
   };
 
-  onCheck = e => {
-    const { name } = e.target;
-    this.setState({
-      [name]: e.target.checked
-    });
-  };
-
   onSubmit = e => {
     e.preventDefault();
-    const { firstName, lastName, email, password, isAdmin } = this.state;
-    const roles = []
+    const {
+      firstName,
+      lastName,
+      mobile,
+      position,
+      email,
+      password,
+      isAdmin,
+      credits,
+      requests
+    } = this.state;
+    const roles = [];
 
-    if(isAdmin) {
-      roles.push(ROLES.ADMIN)
+    if (isAdmin) {
+      roles.push(ROLES.ADMIN);
     }
 
     this.props.firebase
@@ -115,11 +123,16 @@ class SignUpFormBase extends Component {
         return this.props.firebase.user(authUser.user.uid).set({
           firstName,
           lastName,
+          mobile,
+          position,
           email,
-          roles
+          isAdmin,
+          roles,
+          credits,
+          requests
         });
       })
-      .then(authUser => {
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.PROFILE);
       })
@@ -131,22 +144,27 @@ class SignUpFormBase extends Component {
     const {
       firstName,
       lastName,
+      mobile,
+      position,
       email,
       password,
       passwordConf,
-      isAdmin,
       error
     } = this.state;
+
     const isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
       email
     );
+
+    const isMobileNumValid = /^(09|\+639)\d{9}$/i.test(mobile);
 
     // if invalid, disable the submit button
     const isInvalid =
       password === "" ||
       passwordConf === "" ||
       password !== passwordConf ||
-      !isEmailValid;
+      !isEmailValid ||
+      !isMobileNumValid;
 
     return (
       <main className={classes.main}>
@@ -174,6 +192,24 @@ class SignUpFormBase extends Component {
                 name="lastName"
                 onChange={this.onInputChange}
                 value={lastName}
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="mobile">Mobile Number</InputLabel>
+              <Input
+                id="mobile"
+                name="mobile"
+                onChange={this.onInputChange}
+                value={mobile}
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="position">Position</InputLabel>
+              <Input
+                id="position"
+                name="position"
+                onChange={this.onInputChange}
+                value={position}
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
@@ -205,12 +241,6 @@ class SignUpFormBase extends Component {
                 value={passwordConf}
               />
             </FormControl>
-            <Checkbox
-              color="default"
-              checked={isAdmin}
-              onChange={this.onCheck}
-              name="isAdmin"
-            />
             <Button
               type="submit"
               fullWidth

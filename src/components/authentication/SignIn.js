@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withFirebase } from "../firebase";
-import {withAuthorization} from '../session'
+// import {withAuthorization} from '../session'
 import PropTypes from "prop-types";
 import { compose } from "recompose";
 import { Link, withRouter } from "react-router-dom";
@@ -164,9 +164,9 @@ const SignInForm = compose(
   withFirebase
 )(SignInFormBase);
 
-const condition = authUser => !!authUser;
+// const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(SignIn);
-// export default SignIn
+// export default withAuthorization(condition)(SignIn);
+export default SignIn
 
 export { SignInForm };
