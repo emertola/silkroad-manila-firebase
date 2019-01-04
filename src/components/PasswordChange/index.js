@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withFirebase } from "../firebase";
+import { withAuthorization } from "../session";
 import PropTypes from "prop-types";
 import { compose } from "recompose";
 import { withRouter } from "react-router-dom";
@@ -93,9 +94,8 @@ class PasswordChangeFormBase extends Component {
     const { password, passwordConf, error } = this.state;
 
     // if invalid, disable the submit button
-    const isInvalid = password === "" ||
-    passwordConf === "" ||
-    password !== passwordConf
+    const isInvalid =
+      password === "" || passwordConf === "" || password !== passwordConf;
 
     return (
       <main className={classes.main}>
@@ -106,7 +106,7 @@ class PasswordChangeFormBase extends Component {
           </Typography>
           {error && <Typography color="error">{error.message}</Typography>}
           <form className={classes.form} onSubmit={this.onSubmit}>
-          <FormControl margin="normal" required fullWidth>
+            <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">New Password</InputLabel>
               <Input
                 name="password"
@@ -117,7 +117,9 @@ class PasswordChangeFormBase extends Component {
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="passwordConf">Confirm New Password</InputLabel>
+              <InputLabel htmlFor="passwordConf">
+                Confirm New Password
+              </InputLabel>
               <Input
                 name="passwordConf"
                 type="password"
@@ -161,6 +163,8 @@ const PasswordChangeForm = compose(
   withFirebase
 )(PasswordChangeFormBase);
 
-export default PasswordChange;
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(PasswordChange);
 
 export { PasswordChangeForm };
