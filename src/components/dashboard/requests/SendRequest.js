@@ -115,6 +115,10 @@ class SendRequest extends Component {
     reqObject.type = reqType;
     reqObject.coverage = newCoverage;
 
+    const d = new Date()
+    const twoDigits = digit => digit < 10 ? `0${digit}` : digit
+    const currentDate = `${d.getFullYear()}-${twoDigits(d.getMonth() + 1)}-${twoDigits(d.getDate())}`
+
     // send to firebase Users API
 
     firebase.db
@@ -123,8 +127,11 @@ class SendRequest extends Component {
       .set({
         status: 0,
         type: reqType,
-        coverage: newCoverage
-      }).then(() => console.log("Request Sent")).catch(error => console.log(error));
+        coverage: newCoverage,
+        dateSubmitted: currentDate
+      })
+      .then(() => console.log("Request Sent"))
+      .catch(error => console.log(error));
   };
 
   render() {
