@@ -25,7 +25,7 @@ class Dashboard extends Component {
                 <Profile user={authUser} />
               </Grid>
               <Grid item md={3} xs={12}>
-                <RequestLog />
+                <RequestLog user={authUser} />
               </Grid>
             </Grid>
           </div>

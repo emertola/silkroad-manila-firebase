@@ -1,12 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import LocalHotel from "@material-ui/icons/LocalHotel";
-import BeachAccessIcon from "@material-ui/icons/BeachAccess";
+import RequestLogItem from "./RequestLogItem";
 
 const styles = theme => ({
   root: {
@@ -15,33 +11,39 @@ const styles = theme => ({
   }
 });
 
-const RequestLog = props => {
-  const { classes } = props;
-  return (
-    <div>
-      <List className={classes.root}>
-        <ListItem>
-          <Avatar>
-            <BeachAccessIcon />
-          </Avatar>
-          <ListItemText primary="Vacation" secondary="Jan 9, 2014" />
-        </ListItem>
-        <ListItem>
-          <Avatar>
-            <LocalHotel />
-          </Avatar>
-          <ListItemText primary="Sick" secondary="Jan 7, 2014" />
-        </ListItem>
-        <ListItem>
-          <Avatar>
-            <BeachAccessIcon />
-          </Avatar>
-          <ListItemText primary="Vacation" secondary="July 20, 2014" />
-        </ListItem>
-      </List>
-    </div>
-  );
+const reqArrayData = obj => {
+  let reqArray = [];
+  if (obj) {
+    Object.keys(obj).map(key => {
+      const id = key;
+      obj[key].id = id;
+      reqArray.push(obj[key]);
+      return reqArray;
+    });
+  }
+  return reqArray;
 };
+
+class RequestLog extends Component {
+  render() {
+    const { classes, user } = this.props;
+    const { requests } = user;
+
+    return (
+      <div>
+        <List className={classes.root}>
+          {requests ? (
+            reqArrayData(requests).map(item => (
+              <RequestLogItem key={item.id} item={item} />
+            ))
+          ) : (
+            <RequestLogItem />
+          )}
+        </List>
+      </div>
+    );
+  }
+}
 
 RequestLog.propTypes = {
   classes: PropTypes.object.isRequired
