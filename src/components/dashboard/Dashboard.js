@@ -20,7 +20,7 @@ class Dashboard extends Component {
       <AuthUserContext.Consumer>
         {authUser => (
           <div className={classes.root}>
-            <Grid container spacing={24} justify="center">
+            <Grid container spacing={16} justify="center">
               <Grid item md={3} xs={12}>
                 <Profile user={authUser} />
               </Grid>

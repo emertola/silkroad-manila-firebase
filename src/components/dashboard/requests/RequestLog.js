@@ -25,6 +25,10 @@ const reqArrayData = obj => {
 };
 
 class RequestLog extends Component {
+  handleClickItem = item => {
+    console.log(item)
+  }
+
   render() {
     const { classes, user } = this.props;
     const { requests } = user;
@@ -34,7 +38,7 @@ class RequestLog extends Component {
         <List className={classes.root}>
           {requests ? (
             reqArrayData(requests).map(item => (
-              <RequestLogItem key={item.id} item={item} />
+              <RequestLogItem key={item.id} item={item} onClick={() => this.handleClickItem(item)} />
             ))
           ) : (
             <RequestLogItem />
